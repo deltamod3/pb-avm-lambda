@@ -1,0 +1,40 @@
+service: pb-avm
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: eu-north-1
+
+package:
+  individually: true
+  patterns:
+    - apps/**
+
+layers:
+  Core:
+    path: layers/core
+    compatibleRuntimes:
+      - python3.8
+    description: Core Lambda Layer
+
+  Extra:
+    path: layers/extra
+    compatibleRuntimes:
+      - python3.8
+    description: Extra Lambda Layer
+
+functions:
+  get-price:
+    handler: app/app.handler
+    layers:
+      - {Ref: CoreLambdaLayer}
+      - {Ref: ExtraLambdaLayer}
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true

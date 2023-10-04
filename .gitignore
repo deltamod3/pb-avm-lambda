@@ -1,0 +1,7 @@
+node_modules/
+package-lock.json
+.serverless
+__pycache__/
+venv
+layers/core/*
+layers/extra/*
